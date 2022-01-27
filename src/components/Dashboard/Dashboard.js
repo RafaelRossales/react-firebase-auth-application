@@ -69,7 +69,7 @@ async function handleLogOut(){
                         size="small" 
                         fullWidth
                         color="primary"
-                        >UPDATE</Button>
+                        ><Link to="/update-profile">UPDATE</Link></Button>
                     <Button  
                     variant="contained" 
                     color="secondary" 

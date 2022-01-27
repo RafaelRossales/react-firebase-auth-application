@@ -2,24 +2,21 @@ import * as React from 'react';
 import TextField from '@material-ui/core/TextField';
 import Avatar from '@material-ui/core/Avatar';
 import Paper  from '@material-ui/core/Paper'
-// import Link from '@material-ui/core/Link';
 import Button from '@material-ui/core/Button';
 import Typography  from '@material-ui/core/Typography';
 import LockOutlined from '@material-ui/core/Icon';
 import Grid from '@material-ui/core/Grid';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
 import Alert from '@material-ui/lab/Alert';
-import { Link,useNavigate  } from 'react-router-dom'
+import { Link  } from 'react-router-dom'
 
 import  {useAuth }  from '../../contexts/AuthContext';
 
-export default function Login(){
+export default function ForgotPassword(){
 
-    const { login } = useAuth();
+    const { resetPassword } = useAuth();
     const [error,setError ] = React.useState('');
     const [loading,setLoading ] = React.useState(false);
-    const navigate  = useNavigate ()
+    const [message,setMessage] = React.useState('')
 
     const paperStyle={
         padding:20,
@@ -46,13 +43,13 @@ export default function Login(){
         e.preventDefault()
 
         try {
+            setMessage('')
             setError('')
             setLoading(true)
-            await login(emailRef.current.value,passwordRef.current.value)
-            navigate('/')
-
+            await resetPassword(emailRef.current.value)
+            setMessage('Check your inbox for further instructions')
         } catch (error) {
-            setError(error.message);
+            setError('Failed to reset passsword');
         }
         setLoading(false)
     }
@@ -70,9 +67,10 @@ export default function Login(){
                 <Avatar style={avatarStyle}>
                     <LockOutlined/>
                 </Avatar>
-                        <h2>Log In</h2>
+                        <h2>Password Reset</h2>
             </Grid>
                 {error && <Alert severity="error">{error}</Alert>}
+                {message && <Alert severity="success">{message}</Alert>}
                 <form onSubmit={handleSubmite}>
                 <TextField
                 label='Username'
@@ -83,18 +81,9 @@ export default function Login(){
                 id="email"
                 inputRef={emailRef}
                 />
-                <TextField
-                label='Password'
-                placeholder='Enter password'
-                fullWidth
-                required
-                type="password"
-                id="password"
-                inputRef={passwordRef}
-                />
 
                 <div className="">
-                    <Link to="/forgot-password"> Forgot Password</Link>
+                    <Link to="/login">Login</Link>
                 </div>
 
             <Button
@@ -103,7 +92,7 @@ export default function Login(){
             fullWidth
             color="primary"
             >
-            Salvar
+            Reset Password
             </Button>
             </form>
             <Typography style={{ 

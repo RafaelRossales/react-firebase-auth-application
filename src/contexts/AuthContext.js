@@ -23,6 +23,19 @@ export function AuthProvider({ children }) {
     return auth.signOut();
   }
 
+  function resetPassword(email){
+    return auth.sendPasswordResetEmail(email)
+
+  }
+  
+  function updateEmail(email){
+    return auth.updateEmail(email)
+  }
+
+  function updatePassword(password){
+    return auth.updatePassword(password)
+  }
+  
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(user => {
       setCurrentUser(user)
@@ -36,7 +49,10 @@ export function AuthProvider({ children }) {
     currentUser,
     login,
     signup,
-    logout
+    logout,
+    resetPassword,
+    updateEmail,
+    updatePassword
   }
 
   return (

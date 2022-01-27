@@ -2,7 +2,6 @@ import * as React from 'react';
 import TextField from '@material-ui/core/TextField';
 import Avatar from '@material-ui/core/Avatar';
 import Paper  from '@material-ui/core/Paper'
-// import Link from '@material-ui/core/Link';
 import Button from '@material-ui/core/Button';
 import Typography  from '@material-ui/core/Typography';
 import LockOutlined from '@material-ui/core/Icon';
@@ -10,16 +9,18 @@ import Grid from '@material-ui/core/Grid';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import Alert from '@material-ui/lab/Alert';
-import { Link,useNavigate  } from 'react-router-dom'
 
-import  {useAuth }  from '../../contexts/AuthContext';
+import { Link , useNavigate} from 'react-router-dom';
 
-export default function Login(){
+import  {useAuth}  from '../../contexts/AuthContext';
 
-    const { login } = useAuth();
+export default function UpdateProfile(){
+
+    const { currentUser, updatePassword,updateEmail } = useAuth();
     const [error,setError ] = React.useState('');
     const [loading,setLoading ] = React.useState(false);
     const navigate  = useNavigate ()
+
 
     const paperStyle={
         padding:20,
@@ -40,21 +41,34 @@ export default function Login(){
     // Armazena os valores da dos campos input
     var  emailRef = React.useRef();
     var passwordRef = React.useRef();
+    var passwordConfirm=React.useRef();
+    
 
-    async function handleSubmite(e){
-        
-        e.preventDefault()
+    function handleSubmite(e){
 
-        try {
-            setError('')
-            setLoading(true)
-            await login(emailRef.current.value,passwordRef.current.value)
-            navigate('/')
-
-        } catch (error) {
-            setError(error.message);
+        if(passwordRef.current.value != passwordConfirm.current.value){
+            return setError('Password do not match')
         }
-        setLoading(false)
+
+        var promises = [];
+        setLoading(true)
+        setError('')
+
+        if(emailRef.current.value != currentUser.email){
+            promises.push(updateEmail(emailRef.current.value))
+        }
+
+        if(passwordRef.current.value){
+            promises.push(updatePassword(passwordRef.current.value))
+        }
+
+        Promise.all(promises).then(() => {
+            navigate('/')
+        }).catch((error) => {
+            setError('Failed to update')
+        }).finnaly(() => {
+            setLoading(false)
+        })
     }
 
     return (
@@ -70,7 +84,7 @@ export default function Login(){
                 <Avatar style={avatarStyle}>
                     <LockOutlined/>
                 </Avatar>
-                        <h2>Log In</h2>
+                        <h2>Update Profile</h2>
             </Grid>
                 {error && <Alert severity="error">{error}</Alert>}
                 <form onSubmit={handleSubmite}>
@@ -82,37 +96,45 @@ export default function Login(){
                 style={{ marginBottom:'12px',marginTop:'10px' }}
                 id="email"
                 inputRef={emailRef}
+                defaultValue={currentUser.email}
                 />
                 <TextField
                 label='Password'
-                placeholder='Enter password'
                 fullWidth
-                required
                 type="password"
                 id="password"
                 inputRef={passwordRef}
+                placeholder="Leave blank to keep the same"
                 />
 
-                <div className="">
-                    <Link to="/forgot-password"> Forgot Password</Link>
-                </div>
+            <TextField
+            label='Confirm Password'
+            fullWidth
+            required
+            type="password"
+            id="password-confirm"
+            inputRef={passwordConfirm}
+            style={{ marginBottom:'12px',marginTop:'10px' }}
+            placeholder="Leave blank to keep the same"
+            />
 
             <Button
             type="submit"
             variant="contained"
             fullWidth
             color="primary"
+            
             >
-            Salvar
+            Update
             </Button>
             </form>
             <Typography style={{ 
                 marginTop:'10px',
                 textAlign:'center' 
                 }}>
-                Need an account?
-                <Link to="/signup">
-                    Log Up
+                Already have an account?
+                <Link to="/">
+                    Cancel
                 </Link>
             </Typography>
         </Paper>
