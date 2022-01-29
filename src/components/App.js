@@ -11,7 +11,7 @@ import MainPage from "./Main/MainPage.js";
 
 function App() {
   return (
-    <>
+    <div>
         <Router>
           <AuthProvider>
             {/*Identifica a rota atual */}
@@ -26,7 +26,7 @@ function App() {
               </Routes>
           </AuthProvider>
         </Router>
-      </>
+      </div>
   );
 }
 

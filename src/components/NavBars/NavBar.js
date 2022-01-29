@@ -4,6 +4,7 @@ import { alpha, AppBar, Badge, InputBase, makeStyles, Toolbar, Typography, Avata
 import  Search from "@material-ui/icons/Search";
 import Mail from '@material-ui/icons/Mail';
 import Notifications from '@material-ui/icons/Notifications';
+import Cancel from '@material-ui/icons/Cancel'
 
 const useStyles = makeStyles((theme) => ({
     
@@ -23,7 +24,6 @@ const useStyles = makeStyles((theme) => ({
             display:"none"
         },
     },
-
     search:{
         display:'flex',
         alignItems:"center",
@@ -33,16 +33,16 @@ const useStyles = makeStyles((theme) => ({
         },
         borderRadius:theme.shape.borderRadius,
         width:"50%",
-        display:"block",
         [theme.breakpoints.down('sm')]:{
-            display:(props)=>(props.open ? "flex" : "none")
+            display:(props)=>(props.open ? "flex" : "none"),
+            width:"70%",
         },
     },
-
     input:{
         color:"white",
         marginLeft:theme.spacing(1)
     },
+    
 
     icons:{
         alignItems:"center",
@@ -58,6 +58,11 @@ const useStyles = makeStyles((theme) => ({
         [theme.breakpoints.down('sm')]:{
             display:"none"
         },
+    },
+    cancel:{
+        [theme.breakpoints.up("sm")]:{
+            display:'none'
+        }
     }
 
 }));
@@ -69,24 +74,24 @@ export default function NavBar(){
     const classes = useStyles({open});
 
     return(
-        <AppBar>
+        <AppBar position="fixed">
             <Toolbar className={classes.toolbar}>
                 <Typography variant="h6" className={classes.logoLg}>
-                    PORTIFÓLIO REACTJS
+                    LAMA PROJECT
                 </Typography>
 
                 <Typography variant="h6" className={classes.logoSm}>
-                    PORTIFÓLIO
+                    LAMA
                 </Typography>
 
                 <div className={classes.search}>
                     <Search/>
                     <InputBase placeholder="Buscar..." className={classes.input}/>
+                    <Cancel className={classes.cancel} onClick={()=> setOpen(false)}/>
                 </div>
                 <div className={classes.icons}>
                 
                     <Search className={classes.seachButton} onClick={()=>setOpen(true)}/>
-
                     <Badge badgeContent={4} color="secondary" className={classes.badge}>
                         <Mail/>
                     </Badge>
