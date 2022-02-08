@@ -16,6 +16,8 @@ const useStyles = makeStyles((theme) => ({
         color:"white",
         paddingTop:theme.spacing(10),
         backgroundColor:theme.palette.primary.main,
+        position:"sticky", // Impede que a barra lateral se mova
+        top:0, // fixa a barra lateral na posição 0
         [theme.breakpoints.up("sm")]:{
             backgroundColor:"white",
             color:"#555",
