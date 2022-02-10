@@ -13,7 +13,7 @@ import Alert from '@material-ui/lab/Alert';
 import { Link,useNavigate  } from 'react-router-dom'
 import { Container, makeStyles } from '@material-ui/core'
 import  {useAuth }  from '../../contexts/AuthContext';
-
+import GoogleIcon from '@material-ui/icons/Google';
 
 const useStyles = makeStyles((theme) => ({
     container:{
@@ -43,7 +43,7 @@ const useStyles = makeStyles((theme) => ({
         marginBottom:"10px"
     },
     NewAccount:{
-        marginTop:"5px",
+        marginTop:"10px",
         textAlign:'center',
         color: "#152b3c",
     },
@@ -62,11 +62,22 @@ const useStyles = makeStyles((theme) => ({
         height: theme.spacing(10),
         width: theme.spacing(10),
     },
+    Medias:{
+        display:"flex",
+        justifyContent:"space-around"
+    },
+    siginWithGoogle:{
+        fontWeight:300,
+        backgroundColor: "#21b6ae",
+        '&:hover':{
+            backgroundColor: "#21b6ad",
+        }
+    }
 }));
 
 export default function Login(){
 
-    const { login } = useAuth();
+    const { login, handleGoogleLogin } = useAuth();
     const [error,setError ] = React.useState('');
     const [loading,setLoading ] = React.useState(false);
     const navigate  = useNavigate ()
@@ -91,6 +102,26 @@ export default function Login(){
             setError(error.message);
         }
         setLoading(false)
+    }
+
+
+    async function siginWithGoogle(e){
+
+        try{
+            const result = await  handleGoogleLogin();
+
+            console.log(result)
+
+            if(result)
+            {
+                navigate('/')
+            }
+
+
+        }catch(error){
+            console.error(error)
+        }
+
     }
 
     return (
@@ -146,6 +177,31 @@ export default function Login(){
                     Precisa de uma conta ?
                     <Link to="/signup" className={classes.link}>Criar</Link>
                 </Typography>
+                </div>
+                <div className={classes.Medias}>
+                    <div>
+                        <Button 
+                        variant="text"
+                        type="submit"
+                        variant="contained"
+                        fullWidth
+                        color="primary"
+                        className={classes.siginWithGoogle}
+                        onClick={() => siginWithGoogle()}
+                        startIcon={<GoogleIcon />}
+                        >Google
+                        </Button>
+                    </div>
+                    <div>
+                    <Button 
+                        variant="text"
+                        type="submit"
+                        variant="contained"
+                        fullWidth
+                        >
+                            Facebook
+                    </Button>
+                    </div>
                 </div>
             </div>
         </Container>

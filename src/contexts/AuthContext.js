@@ -1,7 +1,10 @@
+import { getAuth,signInWithPopup,GoogleAuthProvider  } from 'firebase/auth'
 import React,{useContext, useEffect, useState} from 'react'
 import  { auth } from '../db/firebase.js'
 
 const AuthContext = React.createContext()
+
+const provider = new GoogleAuthProvider();
 
 export function useAuth() {
   return useContext(AuthContext)
@@ -35,6 +38,37 @@ export function AuthProvider({ children }) {
   function updatePassword(password){
     return auth.updatePassword(password)
   }
+
+  function handleGoogleLogin(){
+
+    const auth = getAuth();
+
+    signInWithPopup(auth,provider)
+
+    .then((result) => 
+    {
+      const credential = GoogleAuthProvider.credentialFromResult(result);
+      const token = credential.accessToken;
+
+      const user = result.user;
+
+      if(user!=null)
+      {
+        return true;
+      }
+
+    }).catch((error) => 
+    {
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      const email = error.email;
+
+      const credential = GoogleAuthProvider.credentialFromError(error);
+
+      console.log(credential,errorMessage,errorCode,email);
+    })
+  
+  }
   
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(user => {
@@ -52,7 +86,8 @@ export function AuthProvider({ children }) {
     logout,
     resetPassword,
     updateEmail,
-    updatePassword
+    updatePassword,
+    handleGoogleLogin
   }
 
   return (

@@ -3,6 +3,7 @@ import LeftBar from "../NavBars/LeftBar";
 import NavBar from "../NavBars/NavBar";
 import Feed from '../NavBars/Feed';
 import RightBar from '../NavBars/RightBar';
+import AddContent from "../Add/Add";
 
 const useStyles = makeStyles((theme) => ({
 
@@ -31,6 +32,7 @@ export default function MainPage(){
             <RightBar />
           </Grid>
         </Grid>
+        <AddContent/>
       </div>
     )
 }
